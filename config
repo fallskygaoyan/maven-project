@@ -1,0 +1,49 @@
+ssh ec2-user@10.44.210.150 -i .ssh/dpc-kp-common.pem
+
+tou450003@VCL0480:~$ cd .ssh
+tou450003@VCL0480:~/.ssh$ ll
+total 16
+drwx------ 1 tou450003 tou450003  512 Jul 18 17:19 ./
+drwxr-xr-x 1 tou450003 tou450003  512 Jul 18 17:19 ../
+-rw------- 1 tou450003 tou450003 1057 Jul 18 17:19 config
+-rw------- 1 tou450003 tou450003 1671 Jul 18 17:01 dpc-kp-common.pem
+-rw------- 1 tou450003 tou450003 1696 Jul 18 17:01 dpc-kp-to150902.pem
+-rw-r--r-- 1 tou450003 tou450003  886 Jul 18 17:04 known_hosts
+tou450003@VCL0480:~/.ssh$ cat config
+Host           10.213.195.1
+    TCPKeepAlive   yes
+    HostName       10.213.195.1
+    User           tou450003
+    GatewayPorts   yes
+    LocalForward   8022 localhost:8022
+    LocalForward   2222 localhost:2222
+    LocalForward   2225 localhost:2225
+    LocalForward   2226 localhost:2226
+
+
+Host           10.44.210.150
+    TCPKeepAlive   yes
+    HostName       10.44.210.150
+    User           ec2-user
+    GatewayPorts   yes
+    LocalForward   8022 localhost:8022
+    LocalForward   2222 localhost:2222
+    LocalForward   2225 localhost:2225
+    LocalForward   2226 localhost:2226
+    IdentityFile   ~/.ssh/dpc-kp-common.pem
+    ProxyCommand   ssh -CW %h:%p 10.213.195.1
+
+
+Host           10.44.2.250
+    TCPKeepAlive   yes
+    HostName       10.44.2.250
+    User           ec2-user
+    GatewayPorts   yes
+    LocalForward   8022 localhost:22
+    LocalForward   2222 localhost:2222
+    LocalForward   2225 localhost:2225
+    LocalForward   2226 localhost:2226
+    IdentityFile   ~/.ssh/dpc-kp-to150902.pem
+    ProxyCommand   ssh -CW %h:%p 10.44.210.150
+
+
